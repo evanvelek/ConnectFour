@@ -3,6 +3,7 @@
 # Contains functions related to board generation visually
 
 import pygame
+import gameplay.player_moves as moves
 
 class InvalidBoardError(Exception):
     pass
@@ -47,8 +48,9 @@ def generate_board(board_state:list[list[int]], surface: pygame.display):
 def main():
     pygame.init()
     surface = pygame.display.set_mode((600, 600), pygame.RESIZABLE)
-    empty_grid = [[0 for _ in range(7)] for _ in range(6)]
-    generate_board(empty_grid, surface)
+    board = [[0 for _ in range(7)] for _ in range(6)]
+    generate_board(board, surface)
+    clock = pygame.time.Clock()
 
     running = True
     while running:
@@ -58,6 +60,24 @@ def main():
                 running = False
             if event.type == pygame.VIDEORESIZE:
                 surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x_pos = event.pos[0]
+                y_pos = event.pos[1]
+                if (surface.get_height() * .1) < y_pos < (surface.get_height() * .9):
+                    if (surface.get_width() * .1) < x_pos < (surface.get_width() * .9):
+                        circ_rad = (surface.get_width() * .8) / 19
+                        base_x_pos = x_pos - surface.get_width() * .1 - circ_rad
+                        pos = base_x_pos // (2.5 * circ_rad)
+                        moves.player_move(board, int(pos))
+                        generate_board(board, surface)
+                        clock.tick(100)
+                        moves.computer_move(board)
+                        clock.tick(1)
+                        generate_board(board, surface)
+
+
+
+
     pygame.quit()
     exit()
 
