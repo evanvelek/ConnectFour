@@ -6,25 +6,25 @@ def game_won(board:list[list[int]]) -> int:
     # Vertical Win
     for row in range(3): # Leave 3
         for col in range(7):
-            if board[row][col] == board[row +1][col] == board[row+2][col] == board[row+3]:
+            if board[row][col] == board[row +1][col] == board[row+2][col] == board[row+3][col] != 0:
                 return board[row][col] # Want to return the player
 
     # Horizontal Win
     for row in range(6):
         for col in range(4):
-            if board[row][col] == board[row][col + 1] == board[row][col + 2] == board[row][col + 3]:
+            if board[row][col] == board[row][col + 1] == board[row][col + 2] == board[row][col + 3] != 0:
                 return board[row][col]
 
     # Up-right diagonal
     for row in range(3):
         for col in range(4):
-            if board[row][col] == board[row + 1][col + 1] == board[row + 2][col + 2] == board[row + 3][col + 3]:
+            if board[row][col] == board[row + 1][col + 1] == board[row + 2][col + 2] == board[row + 3][col + 3] != 0:
                 return board[row][col]
 
     # Up-left diagonal
     for row in range(3):
         for col in range(3, 7):
-            if board[row][col] == board[row + 1][col - 1] == board[row + 2][col-2] == board[row + 3][col-3]:
+            if board[row][col] == board[row + 1][col - 1] == board[row + 2][col-2] == board[row + 3][col-3] != 0:
                 return board[row][col]
 
     return 0
@@ -54,7 +54,7 @@ def _is_winning(board:list[list[int]], col: int, player:int):
 
 __all__ = [
     "game_won",
-    "player_move"
+    "player_move",
     "computer_move"
 ]
 
