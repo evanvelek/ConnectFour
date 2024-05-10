@@ -29,7 +29,7 @@ def game_won(board:list[list[int]]) -> int:
 
     # Non-tie checker
     for col in range(7):
-        if board[5][col] == 0:
+        if board[0][col] == 0:
             return 0 # Only goes through to end of for loop if all the spaces are filled
 
     # Must be a tie if it gets here
@@ -64,23 +64,38 @@ def computer_move(board:list[list[int]]):
     # Now is the interesting part
 
     # Look for spaces that give 2 winnable tiles
-    for col in range(7):
-        temp_board = [list(row) for row in board]  # deep copy as to not change the original board
-        _drop_piece(temp_board, col, 2)
-        count = 0
-        for temp_col in range(7):
-            if _is_winning(temp_board, temp_col, 2):
-                count += 1
-        if count >= 2:
-            _drop_piece(board, col, 2)
-            return
+    temp = _find_two_winnable_tile(board, 2)
+    if temp >= 0:
+        _drop_piece(board, temp, 2)
+        return
+
+    # Look for spaces that give player 2 winnable tiles
+    temp = _find_two_winnable_tile(board, 1)
+    if temp >= 0:
+        _drop_piece(board, temp, 2)
+        return
+
 
     # Just pick a random column
     _drop_piece(board, choice(_get_valid_moves(board)), 2)
     return
 
+def _find_two_winnable_tile(board: list[list[int]], player:int) -> int:
+    """Finds a tiles that gives the given player 2 ways to win the next
+    turn. Returns -1 if this is not possible, otherwise it returns the column"""
+    for col in range(7):
+        temp_board = [list(row) for row in board]  # deep copy as to not change the original board
+        _drop_piece(temp_board, col, player)
+        count = 0
+        for temp_col in range(7):
+            if _is_winning(temp_board, temp_col, player):
+                count += 1
+        if count >= 2:
+            return col
+    return -1
+
 def _is_valid_move(board, col) -> bool:
-    return board[5][col] == 0
+    return board[0][col] == 0
 
 def _get_valid_moves(board) -> list[int]:
     ret = []

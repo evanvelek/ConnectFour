@@ -70,10 +70,15 @@ def main():
                         pos = base_x_pos // (2.5 * circ_rad)
                         moves.player_move(board, int(pos))
                         generate_board(board, surface)
+                        if (moves.game_won(board)):
+                            print("PLAYER 1 WON")
                         clock.tick(100)
                         moves.computer_move(board)
                         clock.tick(1)
                         generate_board(board, surface)
+                        if (moves.game_won(board)):
+                            print("PLAYER 2 WON")
+
 
 
 
